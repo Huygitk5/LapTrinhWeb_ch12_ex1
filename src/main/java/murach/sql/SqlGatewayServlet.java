@@ -1,15 +1,14 @@
 package murach.sql;
 
 import java.io.IOException;
+import java.sql.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.sql.*;
-
+import murach.data.DBUtil;
 
 @WebServlet("/sqlGateway")
 public class SqlGatewayServlet extends HttpServlet {
@@ -21,33 +20,43 @@ public class SqlGatewayServlet extends HttpServlet {
 
         String sqlStatement = request.getParameter("sqlStatement");
         String sqlResult = "";
+        
+        Connection connection = null;
+        Statement statement = null;
+        
         try {
-            // load the driver
-            Class.forName("org.postgresql.Driver");
-            // get a connection
-//            String dbURL = "jdbc:postgresql://dpg-d4jvcpali9vc73ddndkg-a.singapore-postgres.render.com:5432/ch12_ex1_sqlgateway_db"; 
-//            String username = "ch12_ex1_sqlgateway_db_user";
-//            String password = "nPN6IiLfaIuEEPXUxnyDpWRMCMV8DUMF";
-
-            String dbURL = System.getenv("DB_URL");
-            String username = System.getenv("DB_USER");
-            String password = System.getenv("DB_PASS");
-
-            if (dbURL == null) {
-                dbURL = "jdbc:postgresql://dpg-d4jvcpali9vc73ddndkg-a.singapore-postgres.render.com:5432/ch12_ex1_sqlgateway_db";
-            }
-            if (username == null) {
-                username = "ch12_ex1_sqlgateway_db_user";
-            }
-            if (password == null) {
-                password = "nPN6IiLfaIuEEPXUxnyDpWRMCMV8DUMF";
-            }
-            Connection connection = DriverManager.getConnection(
-                    dbURL, username, password);
+//            // load the driver
+//            Class.forName("org.postgresql.Driver");
+//            // get a connection
+////            String dbURL = "jdbc:postgresql://dpg-d4jvcpali9vc73ddndkg-a.singapore-postgres.render.com:5432/ch12_ex1_sqlgateway_db"; 
+////            String username = "ch12_ex1_sqlgateway_db_user";
+////            String password = "nPN6IiLfaIuEEPXUxnyDpWRMCMV8DUMF";
+//
+//            String dbURL = System.getenv("DB_URL");
+//            String username = System.getenv("DB_USER");
+//            String password = System.getenv("DB_PASS");
+//
+//            if (dbURL == null) {
+//                dbURL = "jdbc:postgresql://dpg-d4jvcpali9vc73ddndkg-a.singapore-postgres.render.com:5432/ch12_ex1_sqlgateway_db";
+//            }
+//            if (username == null) {
+//                username = "ch12_ex1_sqlgateway_db_user";
+//            }
+//            if (password == null) {
+//                password = "nPN6IiLfaIuEEPXUxnyDpWRMCMV8DUMF";
+//            }
+//            Connection connection = DriverManager.getConnection(
+//                    dbURL, username, password);
+//
+//            // create a statement
+//            Statement statement = connection.createStatement();
+            // --- GỌI KẾT NỐI TỪ CLASS RIÊNG ---
+            connection = DBUtil.getConnection(); 
 
             // create a statement
-            Statement statement = connection.createStatement();
-
+            statement = connection.createStatement();
+            
+            
             // parse the SQL string
             sqlStatement = sqlStatement.trim();
             if (sqlStatement.length() >= 6) {
@@ -90,4 +99,3 @@ public class SqlGatewayServlet extends HttpServlet {
                 .forward(request, response);
     }
 }
-

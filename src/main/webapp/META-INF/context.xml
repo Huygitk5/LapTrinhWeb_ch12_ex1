@@ -8,5 +8,4 @@
         maxActive="100" maxIdle="30" maxWait="10000" 
         logAbandoned="true" removeAbandoned="true" 
         removeAbandonedTimeout="60" type="javax.sql.DataSource" />
-
 </Context>
